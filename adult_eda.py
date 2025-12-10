@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 columns = [
     "age", "workclass", "fnlwgt", "education", "education-num",
     "marital-status", "occupation", "relationship", "race", "sex",
