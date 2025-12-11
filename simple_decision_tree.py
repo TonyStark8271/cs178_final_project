@@ -68,8 +68,8 @@ preprocess = ColumnTransformer(
 # tuning should be within the classifiers
 tree = DecisionTreeClassifier(
     max_depth = 8,
-    min_samples_split = 2,
-    min_samples_leaf = 1,
+    min_samples_split = 20,
+    min_samples_leaf = 10,
     random_state = 42,
 )
 
@@ -96,8 +96,8 @@ train_d, val_d = validation_curve(
     param_name="classifier__max_depth",
     param_range=depth_range,
     cv=5,
-    scoring="f1",
-    n_jobs=1,
+    scoring="average_precision",
+    n_jobs=1
 )
 
 depth_train_mean = train_d.mean(axis=1)
@@ -113,8 +113,8 @@ train_s, val_s = validation_curve(
     param_name="classifier__min_samples_split",
     param_range=split_range,
     cv=5,
-    scoring="f1",
-    n_jobs=1,
+    scoring="average_precision",
+    n_jobs=1
 )
 
 split_train_mean = train_s.mean(axis=1)
@@ -127,8 +127,8 @@ train_l, val_l = validation_curve(
     param_name="classifier__min_samples_leaf",
     param_range=leaf_range,
     cv=5,
-    scoring="f1",
-    n_jobs=1,
+    scoring="average_precision",
+    n_jobs=1
 )
 
 leaf_train_mean = train_l.mean(axis=1)
@@ -139,33 +139,33 @@ leaf_val_mean = val_l.mean(axis=1)
 fig, axes = plt.subplots(1, 3, figsize=(18, 5), sharey=True)
 
 # depth
-axes[0].plot(depth_x, depth_train_mean, marker="o", label="Train F1")
-axes[0].plot(depth_x, depth_val_mean, marker="o", label="Val F1")
+axes[0].plot(depth_x, depth_train_mean, marker="o", label="Train AP")
+axes[0].plot(depth_x, depth_val_mean, marker="o", label="Val AP")
 axes[0].set_xticks(depth_x)
 axes[0].set_xticklabels(depth_labels, rotation=45)
 axes[0].set_xlabel("max_depth")
-axes[0].set_ylabel("F1-score")
+axes[0].set_ylabel("AP-score")
 axes[0].set_title("Effect of max_depth")
 axes[0].grid(alpha=0.3)
 axes[0].legend()
 
 # min_samples_split
-axes[1].plot(split_range, split_train_mean, marker="o", label="Train F1")
-axes[1].plot(split_range, split_val_mean, marker="o", label="Val F1")
+axes[1].plot(split_range, split_train_mean, marker="o", label="Train AP")
+axes[1].plot(split_range, split_val_mean, marker="o", label="Val AP")
 axes[1].set_xlabel("min_samples_split")
 axes[1].set_title("Effect of min_samples_split")
 axes[1].grid(alpha=0.3)
 axes[1].legend()
 
 # min_samples_leaf
-axes[2].plot(leaf_range, leaf_train_mean, marker="o", label="Train F1")
-axes[2].plot(leaf_range, leaf_val_mean, marker="o", label="Val F1")
+axes[2].plot(leaf_range, leaf_train_mean, marker="o", label="Train AP")
+axes[2].plot(leaf_range, leaf_val_mean, marker="o", label="Val AP")
 axes[2].set_xlabel("min_samples_leaf")
 axes[2].set_title("Effect of min_samples_leaf")
 axes[2].grid(alpha=0.3)
 axes[2].legend()
 
-fig.suptitle("Decision Tree Hyperparameters vs F1 (Train vs Validation)", fontsize=14)
+fig.suptitle("Decision Tree Hyperparameters vs AP (Train vs Validation)", fontsize=14)
 plt.tight_layout()
 plt.show()
 
