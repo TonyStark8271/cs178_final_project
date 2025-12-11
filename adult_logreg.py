@@ -127,16 +127,18 @@ cat_features = preprocess.named_transformers_["cat"].get_feature_names_out()
 feature_names = list(num_features) + list(cat_features)
 coef = log_reg.coef_[0]
 
-classifier_table = pd.DataFrame({
+coef_df = pd.DataFrame({
     "feature": feature_names,
     "weight": coef
 }).sort_values("weight", ascending=False)
-top = classifier_table.reindex(classifier_table.weight.abs().sort_values(ascending=False).index).head(20)
 
-plt.figure(figsize=(8,6))
-plt.barh(top["feature"], top["weight"])
-plt.axvline(0, color="black")
-plt.title("Top Logistic Regression Coefficients (The Classifier)")
+
+
+plt.figure(figsize=(12, max(6, len(coef_df) * 0.2)))
+plt.barh(coef_df["feature"], coef_df["weight"])
+plt.axvline(0, color="black", linewidth=1)
+plt.title("Logistic Regression Coefficients (The Classifier)")
 plt.xlabel("Weight (Effect on Probability of >50K)")
+plt.ylabel("Feature")
 plt.tight_layout()
 plt.show()
