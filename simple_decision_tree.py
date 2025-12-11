@@ -67,7 +67,7 @@ preprocess = ColumnTransformer(
 
 # tuning should be within the classifiers
 tree = DecisionTreeClassifier(
-    max_depth = None,
+    max_depth = 8,
     min_samples_split = 2,
     min_samples_leaf = 1,
     random_state = 42,
@@ -84,9 +84,10 @@ clf_tree.fit(X_train, y_train)
 y_pred = clf_tree.predict(X_test)
 
 # validation and tuning
+
 depth_range = [2, 3, 4, 5, 6, 8, 10, 12, None]
-split_range = [2, 10, 20, 50, 100, 300]
-leaf_range = [1, 2, 5, 10, 20, 50, 150]
+split_range = [2, 20, 100, 300, 600]
+leaf_range = [1, 2, 10, 50, 150, 300]
 
 train_d, val_d = validation_curve(
     clf_tree,
@@ -180,4 +181,23 @@ sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
 plt.title("Decision Tree — Confusion Matrix")
 plt.xlabel("Predicted")
 plt.ylabel("True")
+plt.show()
+
+
+
+# classification results show:
+report = classification_report(y_test, y_pred, output_dict=True)
+report_df = pd.DataFrame(report).transpose()
+
+cls = report_df.loc[["0", "1"], ["precision", "recall", "f1-score"]]
+
+# Plot
+cls.plot(kind="bar", figsize=(8,5))
+plt.title("Classification Metrics for Classes 0 and 1")
+plt.xlabel("Class")
+plt.ylabel("Score")
+plt.ylim(0, 1)
+plt.xticks(rotation=0)
+plt.legend(title="Metric")
+plt.tight_layout()
 plt.show()
