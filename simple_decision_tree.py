@@ -67,7 +67,7 @@ preprocess = ColumnTransformer(
 
 # tuning should be within the classifiers
 tree = DecisionTreeClassifier(
-    max_depth = 8,
+    max_depth = None,
     min_samples_split = 20,
     min_samples_leaf = 10,
     random_state = 42,
