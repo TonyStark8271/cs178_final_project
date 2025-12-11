@@ -84,8 +84,26 @@ y_proba = clf.predict_proba(X_test)[:, 1]
 accuracy = accuracy_score(y_test, y_pred)
 print("\nLogistic Regression Accuracy:", accuracy)
 
+
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
+
+report = classification_report(y_test, y_pred, output_dict=True)
+report_df = pd.DataFrame(report).transpose()
+
+cls = report_df.loc[["0", "1"], ["precision", "recall", "f1-score"]]
+
+# Plot
+plt.figure(figsize=(8,5))
+cls.plot(kind="bar", figsize=(8,5))
+plt.title("Classification Metrics for Classes 0 and 1")
+plt.xlabel("Class")
+plt.ylabel("Score")
+plt.ylim(0, 1)
+plt.xticks(rotation=0)
+plt.legend(title="Metric")
+plt.tight_layout()
+plt.show()
 
 """
 Some plots for better look
