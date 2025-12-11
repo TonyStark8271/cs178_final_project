@@ -41,15 +41,15 @@ test.head()
 
 train = train.dropna(subset=["workclass", "occupation", "native-country"])
 test = test.dropna(subset=["workclass", "occupation", "native-country"])
-# =========================
-# Prepare features and target
-# =========================
 
 X_train = train.drop("income", axis=1)
 y_train = train["income"].apply(lambda x: 1 if x == ">50K" else 0)
 
 X_test = test.drop("income", axis=1)
 y_test = test["income"].apply(lambda x: 1 if x == ">50K." else 0)
+# =========================
+# Prepare features and target
+# =========================
 
 num_cols = X_train.select_dtypes(include=["int64", "float64"]).columns
 cat_cols = X_train.select_dtypes(include=["object"]).columns
